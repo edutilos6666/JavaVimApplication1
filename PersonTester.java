@@ -2,9 +2,56 @@ import java.util.List ;
 //import static MyAssert.* ; 
 public class PersonTester {
   public static void main(String [] args) throws Exception {
-      test1(); 
+      // test1(); 
+       test2(); 
   }
 
+
+
+  private static void test2() throws Exception  {
+         PersonDAO dao = new PersonDAOMysql(); 
+dao.save(new Person(1, "foo", 10, 100.0)); 
+dao.save(new Person(2, "bar", 20, 200.0)); 
+dao.save(new Person(3, "bim", 30, 300.0)); 
+dao.save(new Person(4, "pako", 40, 400.0)); 
+
+  List<Person> list = dao.findAll(); 
+  boolean res = MyAssert.assertEquals(4, list.size()); 
+
+     
+  Person p = dao.findById(1); 
+    MyAssert.assertEquals(1, p.id); 
+    MyAssert.assertEquals("foo", p.name); 
+    MyAssert.assertEquals(10, p.age); 
+    MyAssert.assertEquals(100.0, p.wage); 
+
+
+     //test update 
+       dao.update(3, new Person(3, "newbim", 66, 666.6)); 
+       p = dao.findById(3); 
+       MyAssert.assertEquals(3, p.id); 
+    MyAssert.assertEquals("newbim", p.name); 
+    MyAssert.assertEquals(66, p.age); 
+    MyAssert.assertEquals(666.6, p.wage); 
+
+     //test delete 
+     dao.delete(1); 
+     list = dao.findAll(); 
+     MyAssert.assertEquals(3, list.size()); 
+     dao.delete(2); 
+     list = dao.findAll(); 
+     MyAssert.assertEquals(2, list.size()); 
+     dao.delete(3); 
+     list = dao.findAll(); 
+     MyAssert.assertEquals(1, list.size()); 
+     dao.delete(4); 
+     list = dao.findAll(); 
+     MyAssert.assertEquals(0, list.size()); 
+		     
+
+
+   if(res) System.out.println("Passed"); 
+  }
 
   private static void test1() throws Exception  {
       PersonDAO dao = new PersonDAOImpl(); 
